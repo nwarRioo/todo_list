@@ -16,7 +16,9 @@ const TaskSchema: Schema = new Schema<ITask>({
     description: String,
     status: {
         type: String,
-        default: ETaskStatuses.TODO
+        default: ETaskStatuses.TODO,
+        enum: ETaskStatuses,
+        required: true
     }
 }, {
     versionKey: false

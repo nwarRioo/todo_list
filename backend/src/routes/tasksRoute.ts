@@ -15,6 +15,8 @@ export class TasksRoute {
         this.router = express.Router();
         this.router.get("/", this.getTasks);
         this.router.post("/", this.addTask);
+        this.router.delete("/:id", this.deleteTaskById);
+        this.router.patch("/:id", this.updateTaskById);
     }
 
     public getRouter = (): Router => {
@@ -27,9 +29,17 @@ export class TasksRoute {
     };
 
     private addTask = async (req: Request, res: Response): Promise<void> => {
-        console.log("ESTE: " + req.body);
-        
         const response: IResponse<ITask | IError> = await this.repository.addTask(req.body);
+        res.status(response.status).send(response.result);
+    };
+
+    private deleteTaskById = async (req: Request, res: Response): Promise<void> => {
+        const response: IResponse<string | IError> = await this.repository.deleteTaskById(req.params.id);
+        res.status(response.status).send(response.result);
+    };
+
+    private updateTaskById = async (req: Request, res: Response): Promise<void> => {
+        const response: IResponse<ITask | IError> = await this.repository.updateTaskById(req.params.id, req.body);
         res.status(response.status).send(response.result);
     };
 }

@@ -4,7 +4,8 @@ import IResponse from "../interfaces/IResponse";
 import IError from "../interfaces/IError";
 import { Task } from "../models/Task";
 import { StatusCodes } from "http-status-codes";
-import ITaskCreateDto from "../interfaces/ITaskCreateDto";
+import errorHandler from "../helpers/errorHandler";
+import ITaskDto from "../interfaces/ITaskDto";
 
 
 export class MongoDB {
@@ -25,36 +26,40 @@ export class MongoDB {
                 status: StatusCodes.OK,
                 result: tasks
             };
-        } catch (err: unknown) {
-            const error = err as Error;
-            return {
-                status: StatusCodes.BAD_REQUEST,
-                result: {
-                    status: "error",
-                    message: error.message
-                }
-            };
-        }
+        } catch (err) {return errorHandler(err)};
+        
     };
 
-    public addTask = async (task: ITaskCreateDto): Promise<IResponse<ITask | IError>> => {
+    public addTask = async (task: ITaskDto): Promise<IResponse<ITask | IError>> => {
         try {
-            console.log("VOT: " + task)
             const newTask = await new Task(task).save();
             return {
                 status: StatusCodes.CREATED,
                 result: newTask,
             };
-        } catch (err: unknown) {
-            const error = err as Error;
+        } catch (err) {return errorHandler(err)};
+    };
+
+    public deleteTaskById = async (id: string): Promise<IResponse<string | IError>> => {
+        try {
+            const isDeleted = await Task.findOneAndDelete({ _id: id });
+            if (!isDeleted) throw new Error("Task not found");
             return {
-                status: StatusCodes.BAD_REQUEST,
-                result: {
-                    status: "error",
-                    message: error.message
-                }
+                status: StatusCodes.OK,
+                result: "Task is deleted",
             };
-        };
+        } catch (err) {return errorHandler(err)};
+    };
+
+    public updateTaskById = async (id: string, newData: ITaskDto): Promise<IResponse<ITask | IError>> => {
+        try {
+            const updatedTask = await Task.findOneAndUpdate({_id: id}, {$set: newData}, {new: true, runValidators: true });
+            if(!updatedTask) throw new Error("Task not found");
+            return {
+                status: StatusCodes.OK,
+                result: updatedTask,
+            };
+        } catch (err) {return errorHandler(err)};
     };
 }
 
