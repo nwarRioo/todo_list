@@ -24,4 +24,9 @@ const TaskSchema: Schema = new Schema<ITask>({
     versionKey: false
 });
 
+TaskSchema.pre<ITask>('save', function (next) {
+    this.status = ETaskStatuses.TODO;
+    next();
+});
+
 export const Task = mongoose.model<ITask>('Task', TaskSchema);

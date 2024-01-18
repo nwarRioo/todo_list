@@ -1,5 +1,5 @@
-import { ObjectId } from "mongoose"
-import { ETaskStatuses } from "../enums/ETaskStatuses"
+import { ObjectId } from "mongoose";
+import { ETaskStatuses } from "../../../backend/src/enums/ETaskStatuses"
 
 export default interface ITask {
     _id: ObjectId
