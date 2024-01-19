@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, ReactElement } from "react";
+import { ChangeEvent, FC, ReactElement, useEffect, useState } from "react";
 import styles from "./TaskList.module.css";
 import { useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from "../../store/services/taskService";
 import { ETaskStatuses } from "../../enums/ETaskStatuses";
@@ -6,15 +6,39 @@ import ITask from "../../interfaces/ITask";
 
 
 const TaskList: FC = (): ReactElement => {
-    const {data: tasks} = useGetTasksQuery("");
+    const {data} = useGetTasksQuery("");
     const [deleteTask] = useDeleteTaskMutation();
     const [updateTask] = useUpdateTaskMutation();
+
+    const [filter, setFilter] = useState("ALL")
+    const [tasks, setTasks] = useState<ITask[]>([])
     
- const onChangeHandler = (e: ChangeEvent<HTMLSelectElement>, obj: ITask) => {
-    updateTask({id: obj._id, data: {status: e.target.value as ETaskStatuses}})
- }
+    const onChangeHandler = (e: ChangeEvent<HTMLSelectElement>, obj: ITask) => {
+        updateTask({id: obj._id, data: {status: e.target.value as ETaskStatuses}})
+    }
+
+    const filterTasks = () => {
+        if (data && filter !== "ALL") {
+            const filteredData = data.filter(task => task.status === filter)
+            setTasks(filteredData)
+            return
+        } 
+        data && setTasks(data)
+    }
+
+    useEffect(() => {
+        filterTasks()
+    }, [data, filter])
     return (
         <div className={styles.tableWrapper}>
+            <div>
+                    <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+                        <option value="ALL">ALL</option>
+                        <option value="TODO">TODO</option>
+                        <option value="IN PROGRESS">IN PROGRESS</option>
+                        <option value="COMPLETE">COMPLETE</option>
+                    </select>
+                </div>
             <table className={styles.table}>
                 <thead>
                     <tr >
@@ -23,10 +47,13 @@ const TaskList: FC = (): ReactElement => {
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
+                    
                 </thead>
+                
+                
                 <tbody>
                     {tasks && tasks.map((task, i) => {
-                        return <tr >
+                        return <tr key={task._id}>
                                     <td>{i+1}</td>
                                     <td>{task.title}</td>
                                     <td>
@@ -34,7 +61,7 @@ const TaskList: FC = (): ReactElement => {
                                             <option className={styles.firstOption}>{task.status}</option>
                                             {
                                                 Object.values(ETaskStatuses).filter((status) => status !== task.status).map(status => {
-                                                    return <option value={status}>{status}</option>
+                                                    return <option key={status} value={status}>{status}</option>
                                                 })
                                             }
                                         </select>
