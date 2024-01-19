@@ -65,3 +65,7 @@ th {
 .actionButtons button {
     margin: 0 10px;
 }
+
+.firstOption {
+    display: none;
+}
