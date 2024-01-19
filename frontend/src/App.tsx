@@ -1,12 +1,10 @@
-import { useGetTasksQuery } from "./store/services/taskService"
+import Todo from "./containers/Todo/Todo"
 
 
 const App = () => {
-  const {data} = useGetTasksQuery("");
   return (
     <>
-      <h1>Hello world!</h1>
-      {JSON.stringify(data)}
+      <Todo />
     </>
   )
 }

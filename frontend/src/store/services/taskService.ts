@@ -41,5 +41,6 @@ const taskAPI = api.injectEndpoints({
 })
 
 export const {
-    useGetTasksQuery
+    useGetTasksQuery,
+    useDeleteTaskMutation
 } = taskAPI;
