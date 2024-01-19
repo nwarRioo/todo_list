@@ -21,7 +21,7 @@ export class MongoDB {
 
     public getTasks = async (): Promise<IResponse<ITask[] | IError>> => {
         try {
-            const tasks = await Task.find();
+            const tasks = await Task.find().sort({datetime: -1});
             return {
                 status: StatusCodes.OK,
                 result: tasks
