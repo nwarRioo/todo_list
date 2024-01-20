@@ -6,14 +6,18 @@ import { ETaskStatuses } from "../enums/ETaskStatuses";
 const TaskSchema: Schema = new Schema<ITask>({
     title: {
         type: String,
-        required: true
+        required: true,
+        maxlength: 40
     },
     datetime: {
         type: Date,
         required: true,
         default: Date.now
     },
-    description: String,
+    description: {
+        type: String,
+        maxlength: 250
+    },
     status: {
         type: String,
         default: ETaskStatuses.TODO,
@@ -25,6 +29,7 @@ const TaskSchema: Schema = new Schema<ITask>({
 });
 
 TaskSchema.pre<ITask>('save', function (next) {
+    if(this.title.trim() === '') throw new Error("Title is required")
     this.status = ETaskStatuses.TODO;
     next();
 });
