@@ -4,7 +4,7 @@ import { useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from "
 import { ETaskStatuses } from "../../enums/ETaskStatuses";
 import ITask from "../../interfaces/ITask";
 import Modal from "../UI/Modal/Modal";
-import AddTaskForm from "../Forms/AddForm";
+import AddForm from "../Forms/AddForm";
 import successHandler from "../../helpers/successHandler";
 import errorHandler from "../../helpers/errorHandler";
 import FullTask from "./FullTask/FullTask";
@@ -26,33 +26,41 @@ const intialStateEditTask = {
 const TaskList: FC = (): ReactElement => {
     const [fullTask, setFullTask] = useState(initialStateFullTask)
     const [editTask, setEditTask] = useState(intialStateEditTask)
+    
+    const [showFullTask, setShowFulltask] = useState(false)
+    const [showEditPanel, setShowEditPanel] = useState(false);
+    const [showAddingPanel, setShowAddingPanel] = useState(false)
 
     const {data, isError, error} = useGetTasksQuery("");
     errorHandler(isError, error);
     
-    const [deleteTask, 
+    const [
+        deleteTask, 
         {   
             isError: isErrorRemoveTask, 
             isSuccess: isSuccesRemoveTask, 
-            error: errorRemoveTask}] = useDeleteTaskMutation();
+            error: errorRemoveTask
+        }
+    ] = useDeleteTaskMutation();
 
     successHandler(isSuccesRemoveTask, "Задача удалена!");
     errorHandler(isErrorRemoveTask, errorRemoveTask);      
 
-    const [updateTask, 
+    const [
+        updateTask, 
         {
             isError: isErrorUpdateTask, 
             isSuccess: isSuccesUpdateTask, 
-            error: errorUpdateTask}] = useUpdateTaskMutation();
+            error: errorUpdateTask
+        }
+    ] = useUpdateTaskMutation();
+
     successHandler(isSuccesUpdateTask, "Статус задачи измненен!");
     errorHandler(isErrorUpdateTask, errorUpdateTask)
 
-
-    const [editModal, setEditModal] = useState(false);
-
     const [filter, setFilter] = useState("ALL")
     const [tasks, setTasks] = useState<ITask[]>([])
-    const [showAddingPanel, setShowAddingPanel] = useState(false)
+
     const onChangeHandler = (e: ChangeEvent<HTMLSelectElement>, obj: ITask) => {
         updateTask({id: obj._id, data: {status: e.target.value as ETaskStatuses}})
     }
@@ -70,41 +78,39 @@ const TaskList: FC = (): ReactElement => {
         filterTasks()
     }, [data, filter])
 
-    const closeAddModal = () => {
-        setShowAddingPanel(false)
-    }
 
-    const [isFullTask, setIsFulltask] = useState(false)
-
-    const showFullTask = (title: string, description: string, datetime: string) => {
+    const openAddPanel = () => setShowAddingPanel(true)
+    const closeAddPanel = () => setShowAddingPanel(false)
+    
+    const openFullTask = (title: string, description: string, datetime: string) => {
         setFullTask({title: title, description: description, datetime})
-        setIsFulltask(true)
+        setShowFulltask(true)
     }
 
     const closeFullTask = () => {
-        setIsFulltask(false)
         setFullTask(initialStateFullTask)
+        setShowFulltask(false)
     }
 
-    const showEditModal = (id: string, title: string, description: string) => {
+    const openEditPanel = (id: string, title: string, description: string) => {
         setEditTask({id, title, description});
-        setEditModal(true)
+        setShowEditPanel(true)
     }
 
-    const closeEditModal = () => {
-        setEditModal(false)
+    const closeEditPanel = () => {
         setEditTask(intialStateEditTask)
+        setShowEditPanel(false)
     }
 
     return (
         <>
-            <Modal show={showAddingPanel} closed={closeAddModal} >
-                <AddTaskForm modalCloser={closeAddModal}/>
+            <Modal show={showAddingPanel} closed={closeAddPanel} >
+                <AddForm modalCloser={closeAddPanel}/>
             </Modal>
-            <Modal show={editModal} closed={closeEditModal}>
-                <EditForm modalCloser={closeEditModal} data={{title: editTask.title, description: editTask.description}} id={editTask.id} />
+            <Modal show={showEditPanel} closed={closeEditPanel}>
+                <EditForm modalCloser={closeEditPanel} data={{title: editTask.title, description: editTask.description}} id={editTask.id} />
             </Modal>
-            <Modal show={isFullTask} closed={closeFullTask}>
+            <Modal show={showFullTask} closed={closeFullTask}>
                 <FullTask title={fullTask.title} description={fullTask.description} datetime={fullTask.datetime}/>
             </Modal>
             <div className={styles.top}>
@@ -116,7 +122,7 @@ const TaskList: FC = (): ReactElement => {
                 </select>
                 <h1 className={styles.appTitle}>Todo List</h1>
                 <button 
-                    onClick={() => setShowAddingPanel(true)}
+                    onClick={openAddPanel}
                     className={styles.addButton}>Add new task</button>
             </div>
             <div className={styles.tableWrapper}>
@@ -134,7 +140,7 @@ const TaskList: FC = (): ReactElement => {
                         {tasks && tasks.length ? tasks.map((task, i) => {
                             return <tr key={task._id}>
                                         <td>{i+1}</td>
-                                        <td className={styles.taskTitle} onClick={() => showFullTask(task.title, task.description!, String(task.datetime))}>{task.title}</td>
+                                        <td className={styles.taskTitle} onClick={() => openFullTask(task.title, task.description!, String(task.datetime))}>{task.title}</td>
                                         <td>
                                             <select value={task.status} onChange={(e) => onChangeHandler(e, task)}>
                                                 <option className={styles.firstOption}>{task.status}</option>
@@ -147,7 +153,7 @@ const TaskList: FC = (): ReactElement => {
                                         </td>
                                         <td>
                                             <div className={styles.actionButtons}>
-                                                <button onClick={() => showEditModal(task._id, task.title, task.description!)}>
+                                                <button onClick={() => openEditPanel(task._id, task.title, task.description!)}>
                                                     Edit
                                                 </button>
                                                 <button onClick={() => deleteTask(task._id)}>
