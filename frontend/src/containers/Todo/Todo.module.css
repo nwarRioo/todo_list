@@ -2,5 +2,7 @@
     margin: 0 auto;
     width: max-content;
     margin-top: 20px;
+    background-color: #232323;
+    padding: 15px;
+    border-radius: 18px;
 }
-

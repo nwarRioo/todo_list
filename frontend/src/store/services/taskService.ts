@@ -16,7 +16,7 @@ const taskAPI = api.injectEndpoints({
         }),
         addTask: build.mutation<ITask, ITaskCreateDto>({
             query: (task: ITaskCreateDto) => ({
-                url: "/tasks/",
+                url: "/tasks",
                 method: "POST",
                 body: task
             }),
@@ -43,5 +43,6 @@ const taskAPI = api.injectEndpoints({
 export const {
     useGetTasksQuery,
     useDeleteTaskMutation,
-    useUpdateTaskMutation
+    useUpdateTaskMutation,
+    useAddTaskMutation
 } = taskAPI;

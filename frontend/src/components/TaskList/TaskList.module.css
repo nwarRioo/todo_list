@@ -1,71 +1,102 @@
 .table {
     font-size: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     max-height: 500px;
     overflow: scroll;
     border-collapse: collapse;
+    margin: 10px;
+    
 }
 
 .table thead tr {
     text-align: left;
     color: white;
-    font-weight: bold;
 }
 
-th {
-    background-color: #009879;
+thead {
     position: sticky;
     top: 0;
+    background-color: #232323;
 }
 
 .table th, 
 .table td {
     padding: 12px 15px;
+    color: #fff;
 }
 
 .table tbody tr {
-    border-bottom: 1px solid #dddddd;
-}
-
-.table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+    border-bottom: 0.5px solid #6C63FF;
 }
 
 .table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+    border-bottom: 2px solid #fff;
 }
 
 .tableWrapper {
     max-height: 400px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    
 }
 
 
 .tableWrapper::-webkit-scrollbar {
-    height: 5px;
+    width: 6px;
 }
 
 .tableWrapper::-webkit-scrollbar-track {
+    background: #FFF;
     border-radius: 3px;
+    padding-top: 50px;
+    margin-top: 30px;
 }
 
 .tableWrapper::-webkit-scrollbar-thumb {
-    background: #dddddd;
+    background: #a9a4ff;
     border-radius: 3px;
+    width: 2spx;
 }
 
 .tableWrapper::-webkit-scrollbar-thumb:hover {
-    background: violet;
+    background: #6C63FF;
 }
-
 
 .actionButtons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-.actionButtons button {
-    margin: 0 10px;
+.actionButtons button, .addButton {
+    background-color: #6C63FF;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    text-transform: uppercase;
 }
 
 .firstOption {
     display: none;
+}
+
+
+.table select {
+    color: #6C63FF;
+    font-weight: 600;
+    border: none;
+    outline: none;
+}
+
+
+.top {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter {
+    border: none;
+    outline: none;
 }
