@@ -137,7 +137,7 @@ const TaskList: FC = (): ReactElement => {
                     </thead>
                     
                     <tbody>
-                        {tasks && tasks.length ? tasks.map((task, i) => {
+                        {tasks && data?.length ? tasks.map((task, i) => {
                             return <tr key={task._id}>
                                         <td>{i+1}</td>
                                         <td className={styles.taskTitle} onClick={() => openFullTask(task.title, task.description!, String(task.datetime))}>{task.title}</td>
