@@ -6,6 +6,7 @@ import { Task } from "../models/Task";
 import { StatusCodes } from "http-status-codes";
 import errorHandler from "../helpers/errorHandler";
 import ITaskDto from "../interfaces/ITaskDto";
+import { IMessage } from "../interfaces/IMessage";
 
 
 export class MongoDB {
@@ -40,13 +41,13 @@ export class MongoDB {
         } catch (err) {return errorHandler(err)};
     };
 
-    public deleteTaskById = async (id: string): Promise<IResponse<string | IError>> => {
+    public deleteTaskById = async (id: string): Promise<IResponse<IMessage | IError>> => {
         try {
             const isDeleted = await Task.findOneAndDelete({ _id: id });
             if (!isDeleted) throw new Error("Task not found");
             return {
                 status: StatusCodes.OK,
-                result: "Task is deleted",
+                result: {message: "Task is deleted"},
             };
         } catch (err) {return errorHandler(err)};
     };

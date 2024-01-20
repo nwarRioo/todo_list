@@ -4,6 +4,7 @@ import express from "express";
 import ITask from "../interfaces/ITask";
 import IError from "../interfaces/IError";
 import IResponse from "../interfaces/IResponse";
+import { IMessage } from "../interfaces/IMessage";
 
 
 export class TasksRoute {
@@ -34,7 +35,7 @@ export class TasksRoute {
     };
 
     private deleteTaskById = async (req: Request, res: Response): Promise<void> => {
-        const response: IResponse<string | IError> = await this.repository.deleteTaskById(req.params.id);
+        const response: IResponse<IMessage | IError> = await this.repository.deleteTaskById(req.params.id);
         res.status(response.status).send(response.result);
     };
 
