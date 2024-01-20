@@ -11,3 +11,7 @@ body {
     background-color: #91B7FE;
     background: url("./assets/images/background.svg") center/cover no-repeat;
 }
+
+button {
+    cursor: pointer;
+}

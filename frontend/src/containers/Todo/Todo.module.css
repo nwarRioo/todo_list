@@ -5,4 +5,5 @@
     background-color: #232323;
     padding: 15px;
     border-radius: 18px;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 10, 0.4);
 }

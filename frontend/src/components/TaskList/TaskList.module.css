@@ -1,10 +1,39 @@
+.tableWrapper {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.appTitle {
+    color: #FFFFFF;
+    background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(45deg, #0f288f, #6cdbca, #9c0cd5, #9b23db, #21bbd3, #f011e9, #3adde9, #76d47f, #0f288f, #6cdbca, #9c0cd5, #9b23db);
+    background-size: 400% 400%;
+    animation: animate 15s ease infinite;
+}
+
+
+@keyframes animate {
+    0%{
+        background-position: 0 0;}
+    25%
+        {background-position: 100% 0;}
+    50%
+        {background-position: 100% 100%;}
+    75%
+        {background-position: 0 100%;}
+    100%
+        {background-position: 0 0}
+}
+    
+
 .table {
     font-size: 20px;
     max-height: 500px;
     overflow: scroll;
     border-collapse: collapse;
     margin: 10px;
-    
 }
 
 .table thead tr {
@@ -32,12 +61,6 @@ thead {
     border-bottom: 2px solid #fff;
 }
 
-.tableWrapper {
-    max-height: 400px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    
-}
 
 
 .tableWrapper::-webkit-scrollbar {
@@ -88,7 +111,6 @@ thead {
     outline: none;
 }
 
-
 .top {
     padding: 15px;
     display: flex;
@@ -97,6 +119,8 @@ thead {
 }
 
 .filter {
-    border: none;
+    border: 2px solid #6C63FF;
+    padding: 0 5px;
+    border-radius: 5px;
     outline: none;
 }

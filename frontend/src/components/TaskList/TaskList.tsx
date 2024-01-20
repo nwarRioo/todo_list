@@ -5,12 +5,28 @@ import { ETaskStatuses } from "../../enums/ETaskStatuses";
 import ITask from "../../interfaces/ITask";
 import Modal from "../UI/Modal/Modal";
 import AddTaskForm from "../AddTaskForm/AddTaskForm";
+import successHandler from "../../helpers/successHandler";
+import errorHandler from "../../helpers/errorHandler";
 
 
 const TaskList: FC = (): ReactElement => {
     const {data} = useGetTasksQuery("");
-    const [deleteTask] = useDeleteTaskMutation();
-    const [updateTask] = useUpdateTaskMutation();
+    const [deleteTask, 
+        {   
+            isError: isErrorRemoveTask, 
+            isSuccess: isSuccesRemoveTask, 
+            error: errorRemoveTask}] = useDeleteTaskMutation();
+
+    successHandler(isSuccesRemoveTask, "Задача удалена!");
+    errorHandler(isErrorRemoveTask, errorRemoveTask);      
+
+    const [updateTask, 
+        {
+            isError: isErrorUpdateTask, 
+            isSuccess: isSuccesUpdateTask, 
+            error: errorUpdateTask}] = useUpdateTaskMutation();
+    successHandler(isSuccesUpdateTask, "Статус задачи измненен!");
+    errorHandler(isErrorUpdateTask, errorUpdateTask)
 
     const [filter, setFilter] = useState("ALL")
     const [tasks, setTasks] = useState<ITask[]>([])
@@ -35,10 +51,11 @@ const TaskList: FC = (): ReactElement => {
     const closeAddModal = () => {
         setShowAddingPanel(false)
     }
+
     return (
         <>
             <Modal show={showAddingPanel} closed={closeAddModal} >
-                <AddTaskForm />
+                <AddTaskForm modalCloser={closeAddModal}/>
             </Modal>
             <div className={styles.top}>
                 <select className={styles.filter} value={filter} onChange={(e) => setFilter(e.target.value)}>
@@ -47,6 +64,7 @@ const TaskList: FC = (): ReactElement => {
                     <option value="IN PROGRESS">IN PROGRESS</option>
                     <option value="COMPLETE">COMPLETE</option>
                 </select>
+                <h1 className={styles.appTitle}>Todo List</h1>
                 <button 
                     onClick={() => setShowAddingPanel(true)}
                     className={styles.addButton}>Add new task</button>
