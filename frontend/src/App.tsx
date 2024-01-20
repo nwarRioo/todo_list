@@ -1,6 +1,6 @@
-import Todo from "./containers/Todo/Todo"
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Todo from "./pages/Todo/Todo";
 
 const App = () => {
   return (

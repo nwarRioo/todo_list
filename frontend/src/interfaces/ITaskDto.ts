@@ -1,4 +1,4 @@
-export default interface ITaskUpdateDto {
+export default interface ITaskDto {
     title: string
     description?: string
 }

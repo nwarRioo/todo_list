@@ -1,10 +1,27 @@
+.top {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter {
+    border: 2px solid #6C63FF;
+    padding: 0 5px;
+    border-radius: 5px;
+    outline: none;
+}
+
 .tableWrapper {
     max-height: 400px;
+    min-height: 200px;
     overflow-y: auto;
     scrollbar-width: thin;
+    border-bottom: 2px solid white;
 }
 
 .appTitle {
+    margin: 0 20px;
     color: #FFFFFF;
     background-clip: text;
     color: transparent;
@@ -64,7 +81,7 @@ thead {
 }
 
 .table tbody tr:last-of-type {
-    border-bottom: 2px solid #fff;
+    border-bottom: none
 }
 
 .tableWrapper::-webkit-scrollbar {
@@ -114,16 +131,3 @@ thead {
     outline: none;
 }
 
-.top {
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.filter {
-    border: 2px solid #6C63FF;
-    padding: 0 5px;
-    border-radius: 5px;
-    outline: none;
-}

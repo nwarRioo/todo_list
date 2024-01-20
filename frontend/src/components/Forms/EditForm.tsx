@@ -1,9 +1,10 @@
-import React, { FC, ReactElement, useEffect, useState } from "react";
-import styles from "./EditForm.module.css";
+import React, { ChangeEvent, FC, ReactElement, useEffect, useState } from "react";
+import styles from "./Forms.module.css";
 import { useUpdateTaskMutation } from "../../store/services/taskService";
 import errorHandler from "../../helpers/errorHandler";
 import successHandler from "../../helpers/successHandler";
-import ITaskUpdateDto from "../../interfaces/ITaskUpdateDto";
+import ITaskUpdateDto from "../../interfaces/ITaskDto";
+import ITaskDto from "../../interfaces/ITaskDto";
 
 interface IEditFormProps {
     modalCloser: () => void
@@ -11,40 +12,27 @@ interface IEditFormProps {
     data: ITaskUpdateDto
 }
 
-const EditForm: FC<IEditFormProps> = ({modalCloser, data, id}): ReactElement => {
-    const [task, setTask] = useState<ITaskUpdateDto>({
-        title: "",
-        description: ""
-    })
+const initialTaskState: ITaskDto = {
+    title: "",
+    description: ""
+}
 
-    const [count, setCount] = useState(0);
+const EditForm: FC<IEditFormProps> = ({modalCloser, data, id}): ReactElement => {
+    const [task, setTask] = useState(initialTaskState)
+    const [lettersCount, setLettersCount] = useState(0);
+    const [titleFieldErrorMessage, setTitleFieldErrorMessage] = useState<string>("");
+    const [updateTask, {isError, isSuccess, error}] = useUpdateTaskMutation();
 
     useEffect(() => {
         setTask(data)
-        setCount(data.description!.length)
+        setLettersCount(data.description!.length)
     }, [data])
-    const [titleFieldErrorMessage, setTitleFieldErrorMessage] = useState<string>('');
 
-    const inputHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        setTask(prevState => {
-            return {
-                ...prevState, [e.target.name]: e.target.value,
-            }
-        });
+    const formFieldsHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+        setTitleFieldErrorMessage("");
+        if (e.target.name === "description") setLettersCount(e.target.value.length)
+        setTask(prevState => ({...prevState, [e.target.name]: e.target.value}));
     };
-
-    const textareaHandler = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-        setCount(e.target.value.length)
-        setTask(prevState => {
-            return {
-                ...prevState, [e.target.name]: e.target.value,
-            }
-        });
-    };
-
-    const [updateTask, {isError, isSuccess, error}] = useUpdateTaskMutation();
-    successHandler(isSuccess, "Задача изменена!")
-    errorHandler(isError, error);
 
     const submitHandler = (e: React.FormEvent) => {
         e.preventDefault();
@@ -52,14 +40,14 @@ const EditForm: FC<IEditFormProps> = ({modalCloser, data, id}): ReactElement => 
             setTitleFieldErrorMessage("Title is required!");
             return;
         }
-        updateTask({id: id, data: task});
-        setTask({
-            title: "",
-            description: ""
-        });
+        updateTask({id, data: task});
+        setTask(initialTaskState);
         setTitleFieldErrorMessage("");
         modalCloser();
     }
+
+    successHandler(isSuccess, "Task updated!")
+    errorHandler(isError, error);
 
     return (
         <form className={styles.form} onSubmit={submitHandler}>
@@ -70,7 +58,7 @@ const EditForm: FC<IEditFormProps> = ({modalCloser, data, id}): ReactElement => 
                     maxLength={40}
                     required
                     name="title"
-                    onChange={inputHandler}
+                    onChange={formFieldsHandler}
                     value={task.title}
                     className={styles.title} type="text" />
                     <p className='LoginPage-error-text'>{titleFieldErrorMessage}</p>
@@ -79,11 +67,11 @@ const EditForm: FC<IEditFormProps> = ({modalCloser, data, id}): ReactElement => 
                 placeholder="Description"
                 maxLength={250}
                 className={styles.description}
-                onChange={textareaHandler}
+                onChange={formFieldsHandler}
                 value={task.description}
                 name="description"
             />
-            <p>{count}/250</p>
+            <p>{lettersCount}/250</p>
             <button>SAVE</button>
         </form>
     )

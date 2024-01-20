@@ -1,7 +1,7 @@
 import { IMessage } from "../../interfaces/IMessage";
 import ITask from "../../interfaces/ITask";
-import ITaskCreateDto from "../../interfaces/ITaskCreateDto";
-import ITaskUpdateDto from "../../interfaces/ITaskUpdateDto";
+import ITaskDto from "../../interfaces/ITaskDto";
+import ITaskUpdateDto from "../../interfaces/ITaskDto";
 import ITaskUpdateStatus from "../../interfaces/ITaskUpdateStatus";
 import { api } from "./api";
 
@@ -15,8 +15,8 @@ const taskAPI = api.injectEndpoints({
             }),
             providesTags: ["Task"]
         }),
-        addTask: build.mutation<ITask, ITaskCreateDto>({
-            query: (task: ITaskCreateDto) => ({
+        addTask: build.mutation<ITask, ITaskDto>({
+            query: (task: ITaskDto) => ({
                 url: "/tasks",
                 method: "POST",
                 body: task

@@ -1,7 +1,5 @@
 import { FC, ReactNode } from "react";
-import Backdrop from "../Backdrop/Backdrop";
 import styles from "./Modal.module.css";
-
 
 interface IModalProps {
     children: ReactNode,
@@ -9,23 +7,21 @@ interface IModalProps {
     closed: () => void
 }
 
-const Modal: FC<IModalProps> = (props) => {
+const Modal: FC<IModalProps> = ({show, closed, children}) => {
     return (
-        <>
-            <Backdrop 
-                show={props.show}
-                clicked={props.closed}
-            />
+        <div className={styles.modalContainer}>
             <div 
-                className={styles.Modal}
-                style={{
-                    transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
-                    opacity: props.show ? '1' : '0'
-                }}
-            >
-                {props.children}
-            </div>
-        </>
+                    onClick={(e) => e.stopPropagation()}
+                    className={styles.modal}
+                    style={{
+                        transform: show ? 'translateY(40vh)' : 'translateY(-100vh)',
+                        opacity: show ? '1' : '0'
+                    }}
+                >
+                    {children}
+                </div>
+            {show ? <div onClick={closed} className={styles.backdrop}/> : null}
+        </div>
     )
 }
 

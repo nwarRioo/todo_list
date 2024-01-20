@@ -8,12 +8,8 @@
     gap: 10px;
 }
 
-.form textarea {
-    display: block;
-    resize: none;
+.formTop {
     width: 100%;
-    height: 200px;
-    padding: 10px;
 }
 
 .form input {
@@ -21,10 +17,12 @@
     width: 100%;
 }
 
-.formTop {
+.form textarea {
+    display: block;
+    resize: none;
     width: 100%;
-    display: flex;
-    gap: 10px;
+    height: 200px;
+    padding: 10px;
 }
 
 .form button {
@@ -38,8 +36,4 @@
 
 .requiredSymbol {
     color: red;
-}
-
-.formTop {
-    display: inline;
 }

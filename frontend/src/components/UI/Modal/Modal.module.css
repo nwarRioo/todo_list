@@ -1,8 +1,28 @@
-.Modal {
+.modalContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.backdrop {
     position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    position: absolute;
+    background-color: #FFFFFF;
     z-index: 500;
-    background-color: white;
-    border: 1px solid #ccc;
+    border: 1px solid #CCCCCC;
     box-shadow: 1px 1px 1px black;
     padding: 16px;
     transition: all 0.3s ease-out;

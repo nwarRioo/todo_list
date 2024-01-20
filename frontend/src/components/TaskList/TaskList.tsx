@@ -4,29 +4,32 @@ import { useDeleteTaskMutation, useGetTasksQuery, useUpdateTaskMutation } from "
 import { ETaskStatuses } from "../../enums/ETaskStatuses";
 import ITask from "../../interfaces/ITask";
 import Modal from "../UI/Modal/Modal";
-import AddTaskForm from "../AddTaskForm/AddTaskForm";
+import AddTaskForm from "../Forms/AddForm";
 import successHandler from "../../helpers/successHandler";
 import errorHandler from "../../helpers/errorHandler";
 import FullTask from "./FullTask/FullTask";
-import EditForm from "../EditForm/EditForm";
+import EditForm from "../Forms/EditForm";
+
+const initialStateFullTask = {
+    title: "",
+    description: "",
+    datetime: ""
+}
+
+const intialStateEditTask = {
+    id: "",
+    title: "",
+    description: ""
+}
 
 
 const TaskList: FC = (): ReactElement => {
-    const {data} = useGetTasksQuery("");
-    const [fullTask, setFullTask] = useState({
-        title: "",
-        description: "",
-        datetime: ""
-    })
+    const [fullTask, setFullTask] = useState(initialStateFullTask)
+    const [editTask, setEditTask] = useState(intialStateEditTask)
 
-    const [editTask, setEditTask] = useState({
-        id: "",
-        title: "",
-        description: ""
-    })
-
-    const [editModal, setEditModal] = useState(false);
-
+    const {data, isError, error} = useGetTasksQuery("");
+    errorHandler(isError, error);
+    
     const [deleteTask, 
         {   
             isError: isErrorRemoveTask, 
@@ -43,6 +46,9 @@ const TaskList: FC = (): ReactElement => {
             error: errorUpdateTask}] = useUpdateTaskMutation();
     successHandler(isSuccesUpdateTask, "Статус задачи измненен!");
     errorHandler(isErrorUpdateTask, errorUpdateTask)
+
+
+    const [editModal, setEditModal] = useState(false);
 
     const [filter, setFilter] = useState("ALL")
     const [tasks, setTasks] = useState<ITask[]>([])
@@ -77,7 +83,7 @@ const TaskList: FC = (): ReactElement => {
 
     const closeFullTask = () => {
         setIsFulltask(false)
-        setFullTask({title: "", description: "", datetime: ""})
+        setFullTask(initialStateFullTask)
     }
 
     const showEditModal = (id: string, title: string, description: string) => {
@@ -87,7 +93,7 @@ const TaskList: FC = (): ReactElement => {
 
     const closeEditModal = () => {
         setEditModal(false)
-        setEditTask({id: "", title: "", description: ""})
+        setEditTask(intialStateEditTask)
     }
 
     return (
@@ -125,7 +131,7 @@ const TaskList: FC = (): ReactElement => {
                     </thead>
                     
                     <tbody>
-                        {tasks && tasks.map((task, i) => {
+                        {tasks && tasks.length ? tasks.map((task, i) => {
                             return <tr key={task._id}>
                                         <td>{i+1}</td>
                                         <td className={styles.taskTitle} onClick={() => showFullTask(task.title, task.description!, String(task.datetime))}>{task.title}</td>
@@ -151,7 +157,7 @@ const TaskList: FC = (): ReactElement => {
                                             </div>
                                         </td>
                                     </tr>
-                        })}
+                        }) : <tr style={{color: "white"}}><td colSpan={4}>No tasks yet... CLick button to add</td></tr>}
                     </tbody>
                 </table>
             </div>

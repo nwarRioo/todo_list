@@ -7,7 +7,6 @@ interface IFullTaskProps {
     datetime: Date | string
 }
 
-
 const FullTask: FC<IFullTaskProps> = ({title, description, datetime}): ReactElement => {
     return (
         <div className={styles.fullTask}>
