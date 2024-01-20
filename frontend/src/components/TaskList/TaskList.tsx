@@ -7,10 +7,26 @@ import Modal from "../UI/Modal/Modal";
 import AddTaskForm from "../AddTaskForm/AddTaskForm";
 import successHandler from "../../helpers/successHandler";
 import errorHandler from "../../helpers/errorHandler";
+import FullTask from "./FullTask/FullTask";
+import EditForm from "../EditForm/EditForm";
 
 
 const TaskList: FC = (): ReactElement => {
     const {data} = useGetTasksQuery("");
+    const [fullTask, setFullTask] = useState({
+        title: "",
+        description: "",
+        datetime: ""
+    })
+
+    const [editTask, setEditTask] = useState({
+        id: "",
+        title: "",
+        description: ""
+    })
+
+    const [editModal, setEditModal] = useState(false);
+
     const [deleteTask, 
         {   
             isError: isErrorRemoveTask, 
@@ -52,10 +68,38 @@ const TaskList: FC = (): ReactElement => {
         setShowAddingPanel(false)
     }
 
+    const [isFullTask, setIsFulltask] = useState(false)
+
+    const showFullTask = (title: string, description: string, datetime: string) => {
+        setFullTask({title: title, description: description, datetime})
+        setIsFulltask(true)
+    }
+
+    const closeFullTask = () => {
+        setIsFulltask(false)
+        setFullTask({title: "", description: "", datetime: ""})
+    }
+
+    const showEditModal = (id: string, title: string, description: string) => {
+        setEditTask({id, title, description});
+        setEditModal(true)
+    }
+
+    const closeEditModal = () => {
+        setEditModal(false)
+        setEditTask({id: "", title: "", description: ""})
+    }
+
     return (
         <>
             <Modal show={showAddingPanel} closed={closeAddModal} >
                 <AddTaskForm modalCloser={closeAddModal}/>
+            </Modal>
+            <Modal show={editModal} closed={closeEditModal}>
+                <EditForm modalCloser={closeEditModal} data={{title: editTask.title, description: editTask.description}} id={editTask.id} />
+            </Modal>
+            <Modal show={isFullTask} closed={closeFullTask}>
+                <FullTask title={fullTask.title} description={fullTask.description} datetime={fullTask.datetime}/>
             </Modal>
             <div className={styles.top}>
                 <select className={styles.filter} value={filter} onChange={(e) => setFilter(e.target.value)}>
@@ -84,7 +128,7 @@ const TaskList: FC = (): ReactElement => {
                         {tasks && tasks.map((task, i) => {
                             return <tr key={task._id}>
                                         <td>{i+1}</td>
-                                        <td>{task.title}</td>
+                                        <td className={styles.taskTitle} onClick={() => showFullTask(task.title, task.description!, String(task.datetime))}>{task.title}</td>
                                         <td>
                                             <select value={task.status} onChange={(e) => onChangeHandler(e, task)}>
                                                 <option className={styles.firstOption}>{task.status}</option>
@@ -97,17 +141,17 @@ const TaskList: FC = (): ReactElement => {
                                         </td>
                                         <td>
                                             <div className={styles.actionButtons}>
-                                                <button>
-                                                Edit
-                                            </button>
-                                            <button onClick={() => deleteTask(task._id)}>
-                                                Remove
-                                            </button>
+                                                <button onClick={() => showEditModal(task._id, task.title, task.description!)}>
+                                                    Edit
+                                                </button>
+                                                <button onClick={() => deleteTask(task._id)}>
+                                                    Remove
+                                                </button>
+                                                
                                             </div>
                                         </td>
                                     </tr>
                         })}
-                        
                     </tbody>
                 </table>
             </div>

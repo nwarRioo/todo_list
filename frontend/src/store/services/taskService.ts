@@ -2,6 +2,7 @@ import { IMessage } from "../../interfaces/IMessage";
 import ITask from "../../interfaces/ITask";
 import ITaskCreateDto from "../../interfaces/ITaskCreateDto";
 import ITaskUpdateDto from "../../interfaces/ITaskUpdateDto";
+import ITaskUpdateStatus from "../../interfaces/ITaskUpdateStatus";
 import { api } from "./api";
 
 
@@ -29,7 +30,7 @@ const taskAPI = api.injectEndpoints({
             }),
             invalidatesTags: ["Task"]
         }),
-        updateTask: build.mutation<ITask, { id: string, data: ITaskUpdateDto }>({
+        updateTask: build.mutation<ITask, { id: string, data: ITaskUpdateDto | ITaskUpdateStatus }>({
             query: ({id, data}) => ({
                 url: `/tasks/${id}`,
                 method: "PATCH",

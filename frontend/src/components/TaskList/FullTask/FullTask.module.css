@@ -1,0 +1,12 @@
+.fullTask {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 400px;
+    gap: 10px;
+}
+
+.fullTaskTop {
+    display: flex;
+    justify-content: space-between;
+}

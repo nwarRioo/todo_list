@@ -13,7 +13,6 @@
     animation: animate 15s ease infinite;
 }
 
-
 @keyframes animate {
     0%{
         background-position: 0 0;}
@@ -27,7 +26,6 @@
         {background-position: 0 0}
 }
     
-
 .table {
     font-size: 20px;
     max-height: 500px;
@@ -53,6 +51,14 @@ thead {
     color: #fff;
 }
 
+.taskTitle {
+    cursor: pointer;
+}
+
+.taskTitle:hover {
+    color: #6C63FF;
+}
+
 .table tbody tr {
     border-bottom: 0.5px solid #6C63FF;
 }
@@ -60,8 +66,6 @@ thead {
 .table tbody tr:last-of-type {
     border-bottom: 2px solid #fff;
 }
-
-
 
 .tableWrapper::-webkit-scrollbar {
     width: 6px;
@@ -102,7 +106,6 @@ thead {
 .firstOption {
     display: none;
 }
-
 
 .table select {
     color: #6C63FF;

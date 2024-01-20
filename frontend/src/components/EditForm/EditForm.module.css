@@ -1,4 +1,4 @@
-.addTaskForm {
+.form {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,7 +8,7 @@
     gap: 10px;
 }
 
-.addTaskForm textarea {
+.form textarea {
     display: block;
     resize: none;
     width: 100%;
@@ -16,18 +16,18 @@
     padding: 10px;
 }
 
-.addTaskForm input {
+.form input {
     display: block;
     width: 100%;
 }
 
-.addFormTop {
+.formTop {
     width: 100%;
     display: flex;
     gap: 10px;
 }
 
-.addTaskForm button {
+.form button {
     background-color: #6C63FF;
     border: none;
     padding: 5px 10px;
@@ -40,6 +40,6 @@
     color: red;
 }
 
-.addFormTop {
+.formTop {
     display: inline;
 }
